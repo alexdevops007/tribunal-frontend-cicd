@@ -22,7 +22,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useCourtStore } from "../store/courtStore";
+import { useCourtStore } from "../stores/courtStore";
 import CourtCard from "../components/courts/CourtCard.vue";
 
 const courtStore = useCourtStore();

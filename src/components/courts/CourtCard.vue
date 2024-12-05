@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { useCourtStore } from "../../store/courtStore";
+import { useCourtStore } from "../../stores/courtStore";
 const props = defineProps({
   court: {
     type: Object,

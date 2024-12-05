@@ -1,4 +1,3 @@
-// src/mockData.js
 export const mockCourts = [
   {
     _id: "1",
