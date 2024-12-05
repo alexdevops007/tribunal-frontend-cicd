@@ -1,39 +1,50 @@
+<!-- src/views/CourtList.vue -->
 <template>
-  <div>
+  <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Liste des Tribunaux</h1>
-    <router-link to="/courts/create" class="btn-primary mb-4 inline-block"
-      >Ajouter un Tribunal</router-link
+    <router-link
+      to="/create"
+      class="bg-blue-500 text-white px-4 py-2 rounded"
     >
-    <div v-if="courtStore.loading">Chargement...</div>
-    <div v-else>
-      <div v-if="courtStore.courts.length">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <CourtCard
-            v-for="court in courtStore.courts"
-            :key="court._id"
-            :court="court"
-          />
+      Ajouter un Tribunal
+    </router-link>
+    <ul class="mt-4">
+      <li
+        v-for="court in courts"
+        :key="court.id"
+        class="border-b py-2 flex justify-between items-center"
+      >
+        <div>
+          <h2 class="text-xl font-semibold">{{ court.name }}</h2>
+          <p>{{ court.location }} - {{ court.jurisdiction }}</p>
         </div>
-      </div>
-      <div v-else>Aucun tribunal trouvé.</div>
-    </div>
+        <div>
+          <router-link
+            :to="`/court/${court.id}`"
+            class="text-blue-500 hover:underline mr-2"
+          >
+            Détails
+          </router-link>
+          <button
+            @click="deleteCourt(court.id)"
+            class="text-red-500 hover:underline"
+          >
+            Supprimer
+          </button>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useCourtStore } from "../stores/courtStore";
-import CourtCard from "../components/courts/CourtCard.vue";
+import { useCourtStore } from '../stores/courtStore'
+import { onMounted } from 'vue'
 
-const courtStore = useCourtStore();
+const courtStore = useCourtStore()
+const { courts, deleteCourt } = courtStore
 
 onMounted(() => {
-  courtStore.fetchCourts();
-});
+  // Chargement initial si nécessaire
+})
 </script>
-
-<style scoped>
-.btn-primary {
-  @apply bg-blue-500 text-white px-4 py-2 rounded;
-}
-</style>
