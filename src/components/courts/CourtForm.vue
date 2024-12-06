@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useCourtStore } from "../../store/courtStore";
 
