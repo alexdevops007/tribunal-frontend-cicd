@@ -1,10 +1,9 @@
 // src/stores/courtStore.js
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const useCourtStore = defineStore("courtStore", () => {
   const courts = ref([
-    
     {
       id: "1",
       name: "Cour Suprême de la RDC",
@@ -77,6 +76,22 @@ export const useCourtStore = defineStore("courtStore", () => {
     },
   ]);
 
+  const searchTerm = ref(""); // Terme de recherche
+
+  // Filtrer les tribunaux
+  const filteredCourts = computed(() => {
+    if (!searchTerm.value.trim()) {
+      return courts.value; // Si la recherche est vide, retourner tous les tribunaux
+    }
+    const term = searchTerm.value.toLowerCase();
+    return courts.value.filter(
+      (court) =>
+        court.name.toLowerCase().includes(term) ||
+        court.location.toLowerCase().includes(term) ||
+        court.jurisdiction.toLowerCase().includes(term)
+    );
+  });
+
   const addCourt = (court) => {
     court.id = courts.value.length + 1;
     courts.value.push(court);
@@ -101,6 +116,8 @@ export const useCourtStore = defineStore("courtStore", () => {
 
   return {
     courts,
+    searchTerm,
+    filteredCourts,
     addCourt,
     getCourtById,
     updateCourt,
