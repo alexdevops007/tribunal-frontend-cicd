@@ -1,11 +1,12 @@
 export default {
   collectCoverage: true,
+  coverageDirectory: "coverage",
   collectCoverageFrom: [
     "src/**/*.{js,vue}",
     "!src/main.js",
     "!**/node_modules/**",
   ],
-  coverageReporters: ["lcov", "text-summary"],
+  coverageReporters: ["lcov", "text-summary", "text"],
   testEnvironment: "jsdom",
   transform: {
     "^.+\\.vue$": "vue-jest",

@@ -23,3 +23,23 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("login", (email, password) => {
+  cy.request({
+    method: "POST",
+    url: "/api/auth/login",
+    body: { email, password },
+  }).then((resp) => {
+    window.localStorage.setItem("token", resp.body.token);
+  });
+});
+
+Cypress.Commands.add(
+  "fillCourtForm",
+  (name, location, jurisdiction, contact) => {
+    cy.get('input[placeholder="Nom du tribunal"]').type(name);
+    cy.get('input[placeholder="Emplacement"]').type(location);
+    cy.get('input[placeholder="Juridiction"]').type(jurisdiction);
+    cy.get('input[placeholder="Contact"]').type(contact);
+  }
+);

@@ -14,7 +14,18 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+// import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Importer les commandes personnalisées
+import './commands';
+
+// Configurer le plugin de couverture
+import '@cypress/code-coverage/support';
+
+// Exemple de hook global
+beforeEach(() => {
+  cy.login('admin@example.com', 'password'); // Commande personnalisée
+});

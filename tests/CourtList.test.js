@@ -1,4 +1,3 @@
-// tests/CourtList.test.js
 import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import CourtList from "../src/views/CourtList.vue";

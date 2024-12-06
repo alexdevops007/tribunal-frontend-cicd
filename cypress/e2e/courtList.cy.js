@@ -1,5 +1,3 @@
-// cypress/e2e/courtList.spec.js
-
 describe("Gestion des Tribunaux - Liste", () => {
   it("Affiche la liste des tribunaux", () => {
     cy.visit("/");

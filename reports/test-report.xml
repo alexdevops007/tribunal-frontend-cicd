@@ -1,0 +1,8 @@
+<testExecutions version="1">
+  <file path="tests/CourtList.test.js">
+    <testCase name="affiche la liste des tribunaux" duration="27" />
+  </file>
+  <file path="tests/CreateCourt.test.js">
+    <testCase name="ajoute un tribunal et redirige vers la liste" duration="49" />
+  </file>
+</testExecutions>
