@@ -69,18 +69,22 @@ const form = ref({
   contact: "",
 });
 
-if (props.courtData && props.courtData._id) {
+// Remplir le formulaire si courtData existe (édition)
+if (props.courtData && props.courtData.id) {
   isEdit.value = true;
   form.value = { ...props.courtData };
 }
 
+// Gestion du formulaire
 const handleSubmit = async () => {
   if (isEdit.value) {
-    await courtStore.editCourt(props.courtData._id, form.value);
+    // Mise à jour d'un tribunal
+    courtStore.editCourt(props.courtData.id, form.value);
   } else {
-    await courtStore.addCourt(form.value);
+    // Création d'un nouveau tribunal
+    courtStore.addCourt(form.value);
   }
-  router.push("/courts");
+  router.push("/"); // Redirige vers la liste après action
 };
 </script>
 

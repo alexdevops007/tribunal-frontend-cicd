@@ -13,6 +13,7 @@ const routes = [
     props: true,
   },
   { path: "/create", name: "CreateCourt", component: CreateCourt },
+  { path: "/edit/:id", component: CourtForm, props: true }, // Route d'édition
 ];
 
 const router = createRouter({

@@ -1,158 +1,138 @@
 import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import CourtForm from "../src/components/courts/CourtForm.vue";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { useCourtStore } from "../src/stores/courtStore";
+import { createRouter, createWebHistory } from "vue-router";
+import { vi } from "vitest";
+
+// Configuration du routeur
+const routes = [{ path: "/", component: { template: "<div>Home</div>" } }];
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 describe("CourtForm.vue", () => {
-  let mockRouterPush;
-  let mockAddCourt;
-  let mockEditCourt;
+  let courtStore;
 
   beforeEach(() => {
-    // Mock du router
-    mockRouterPush = vi.fn();
+    // Créer une instance de Pinia avec des actions stubées
+    const pinia = createTestingPinia({
+      stubActions: false, // Actions doivent être simulées manuellement
+    });
+    courtStore = useCourtStore(pinia);
 
-    // Mock des actions Pinia
-    mockAddCourt = vi.fn();
-    mockEditCourt = vi.fn();
+    // Stubber les actions du store
+    courtStore.addCourt = vi.fn();
+    courtStore.editCourt = vi.fn();
   });
 
-  it("affiche le formulaire en mode création", () => {
+  it("remplit les champs lors de l'édition", async () => {
+    const courtData = {
+      id: "1",
+      name: "Tribunal Test",
+      location: "Ville Test",
+      jurisdiction: "Compétence Test",
+      contact: "+243000000001",
+    };
+
     const wrapper = mount(CourtForm, {
       global: {
-        plugins: [
-          createTestingPinia({
-            actions: {
-              addCourt: mockAddCourt,
-            },
-          }),
-        ],
+        plugins: [router],
         mocks: {
-          $router: {
-            push: mockRouterPush,
-          },
+          $router: router,
         },
       },
-    });
-
-    expect(wrapper.find("button").text()).toBe("Créer");
-  });
-
-  it("affiche le formulaire en mode édition", () => {
-    const wrapper = mount(CourtForm, {
       props: {
-        courtData: {
-          _id: "1",
-          name: "Tribunal de Commerce",
-          location: "Lubumbashi",
-          jurisdiction: "Commerce",
-          contact: "+243999999999",
-        },
-      },
-      global: {
-        plugins: [
-          createTestingPinia({
-            actions: {
-              editCourt: mockEditCourt,
-            },
-          }),
-        ],
-        mocks: {
-          $router: {
-            push: mockRouterPush,
-          },
-        },
+        courtData,
       },
     });
 
-    expect(wrapper.find("button").text()).toBe("Mettre à jour");
+    expect(
+      wrapper.find('input[placeholder="Nom du tribunal"]').element.value
+    ).toBe(courtData.name);
+    expect(
+      wrapper.find('input[placeholder="Localisation"]').element.value
+    ).toBe(courtData.location);
+    expect(wrapper.find('input[placeholder="Compétence"]').element.value).toBe(
+      courtData.jurisdiction
+    );
+    expect(wrapper.find('input[placeholder="Contact"]').element.value).toBe(
+      courtData.contact
+    );
   });
 
-//   it("soumet les données pour créer un tribunal", async () => {
-//     const wrapper = mount(CourtForm, {
-//       global: {
-//         plugins: [
-//           createTestingPinia({
-//             actions: {
-//               addCourt: mockAddCourt,
-//             },
-//           }),
-//         ],
-//         mocks: {
-//           $router: {
-//             push: mockRouterPush,
-//           },
-//         },
-//       },
-//     });
+  it("appelle addCourt pour créer un tribunal", async () => {
+    const wrapper = mount(CourtForm, {
+      global: {
+        plugins: [router],
+      },
+    });
 
-//     // Remplir le formulaire
-//     await wrapper
-//       .find('input[placeholder="Nom du tribunal"]')
-//       .setValue("Tribunal de Commerce");
-//     await wrapper
-//       .find('input[placeholder="Localisation"]')
-//       .setValue("Lubumbashi");
-//     await wrapper.find('input[placeholder="Compétence"]').setValue("Commerce");
-//     await wrapper
-//       .find('input[placeholder="Contact"]')
-//       .setValue("+243999999999");
+    const formData = {
+      name: "Tribunal Nouveau",
+      location: "Ville Nouvelle",
+      jurisdiction: "Nouvelle Compétence",
+      contact: "+243000000002",
+    };
 
-//     // Soumettre le formulaire
-//     await wrapper.find("form").trigger("submit.prevent");
+    await wrapper
+      .find('input[placeholder="Nom du tribunal"]')
+      .setValue(formData.name);
+    await wrapper
+      .find('input[placeholder="Localisation"]')
+      .setValue(formData.location);
+    await wrapper
+      .find('input[placeholder="Compétence"]')
+      .setValue(formData.jurisdiction);
+    await wrapper
+      .find('input[placeholder="Contact"]')
+      .setValue(formData.contact);
 
-//     expect(mockAddCourt).toHaveBeenCalledWith({
-//       name: "Tribunal de Commerce",
-//       location: "Lubumbashi",
-//       jurisdiction: "Commerce",
-//       contact: "+243999999999",
-//     });
+    await wrapper.find("form").trigger("submit.prevent");
 
-//     expect(mockRouterPush).toHaveBeenCalledWith("/courts");
-//   });
+    // Vérifiez que la méthode addCourt a été appelée
+    expect(courtStore.addCourt).toHaveBeenCalled();
+    expect(courtStore.addCourt).toHaveBeenCalledWith(formData);
+  });
 
-//   it("soumet les données pour modifier un tribunal", async () => {
-//     const wrapper = mount(CourtForm, {
-//       props: {
-//         courtData: {
-//           _id: "1",
-//           name: "Tribunal de Commerce",
-//           location: "Lubumbashi",
-//           jurisdiction: "Commerce",
-//           contact: "+243999999999",
-//         },
-//       },
-//       global: {
-//         plugins: [
-//           createTestingPinia({
-//             actions: {
-//               editCourt: mockEditCourt,
-//             },
-//           }),
-//         ],
-//         mocks: {
-//           $router: {
-//             push: mockRouterPush,
-//           },
-//         },
-//       },
-//     });
+  it("appelle editCourt pour mettre à jour un tribunal", async () => {
+    const courtData = {
+      id: "1",
+      name: "Tribunal Test",
+      location: "Ville Test",
+      jurisdiction: "Compétence Test",
+      contact: "+243000000001",
+    };
 
-//     // Modifier le nom du tribunal
-//     await wrapper
-//       .find('input[placeholder="Nom du tribunal"]')
-//       .setValue("Tribunal de Grande Instance");
+    const wrapper = mount(CourtForm, {
+      global: {
+        plugins: [router],
+      },
+      props: {
+        courtData,
+      },
+    });
 
-//     // Soumettre le formulaire
-//     await wrapper.find("form").trigger("submit.prevent");
+    const updatedData = {
+      ...courtData,
+      name: "Tribunal Modifié",
+      location: "Ville Modifiée",
+    };
 
-//     expect(mockEditCourt).toHaveBeenCalledWith("1", {
-//       name: "Tribunal de Grande Instance",
-//       location: "Lubumbashi",
-//       jurisdiction: "Commerce",
-//       contact: "+243999999999",
-//     });
+    await wrapper
+      .find('input[placeholder="Nom du tribunal"]')
+      .setValue(updatedData.name);
+    await wrapper
+      .find('input[placeholder="Localisation"]')
+      .setValue(updatedData.location);
+    await wrapper.find("form").trigger("submit.prevent");
 
-//     expect(mockRouterPush).toHaveBeenCalledWith("/courts");
-//   });
+    // Vérifiez que la méthode editCourt a été appelée
+    expect(courtStore.editCourt).toHaveBeenCalled();
+    expect(courtStore.editCourt).toHaveBeenCalledWith(
+      courtData.id,
+      updatedData
+    );
+  });
 });

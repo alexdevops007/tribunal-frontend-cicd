@@ -32,6 +32,12 @@
           >
             Détails
           </router-link>
+          <router-link
+            :to="{ path: `/edit/${court.id}`, params: { id: court.id } }"
+            class="text-blue-500 hover:underline mr-2"
+          >
+            Modifier
+          </router-link>
           <button
             @click="deleteCourt(court.id)"
             class="text-red-500 hover:underline"

@@ -101,18 +101,17 @@ export const useCourtStore = defineStore("courtStore", () => {
     return courts.value.find((court) => court.id === Number(id));
   };
 
-  const updateCourt = (updatedCourt) => {
-    const index = courts.value.findIndex(
-      (court) => court.id === updatedCourt.id
-    );
-    if (index !== -1) {
-      courts.value[index] = updatedCourt;
-    }
-  };
-
   const deleteCourt = (id) => {
     courts.value = courts.value.filter((court) => court.id !== id);
   };
+
+  const editCourt = (id, updatedCourt) => {
+    const index = courts.value.findIndex((court) => court.id === id);
+    if (index !== -1) {
+      courts.value[index] = { ...courts.value[index], ...updatedCourt };
+    }
+  };
+
 
   return {
     courts,
@@ -120,7 +119,7 @@ export const useCourtStore = defineStore("courtStore", () => {
     filteredCourts,
     addCourt,
     getCourtById,
-    updateCourt,
+    editCourt,
     deleteCourt,
   };
 });

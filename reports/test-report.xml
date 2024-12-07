@@ -1,6 +1,7 @@
 <testExecutions version="1">
   <file path="tests/CourtForm.test.js">
-    <testCase name="CourtForm.vue - affiche le formulaire en mode création" duration="17" />
-    <testCase name="CourtForm.vue - affiche le formulaire en mode édition" duration="3" />
+    <testCase name="CourtForm.vue - remplit les champs lors de l&apos;édition" duration="16" />
+    <testCase name="CourtForm.vue - appelle addCourt pour créer un tribunal" duration="9" />
+    <testCase name="CourtForm.vue - appelle editCourt pour mettre à jour un tribunal" duration="4" />
   </file>
 </testExecutions>
