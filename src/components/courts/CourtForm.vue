@@ -2,11 +2,23 @@
   <form @submit.prevent="handleSubmit" class="space-y-4">
     <div>
       <label class="block">Nom du Tribunal</label>
-      <input v-model="form.name" type="text" class="input-field" required />
+      <input
+        v-model="form.name"
+        type="text"
+        class="input-field"
+        placeholder="Nom du tribunal"
+        required
+      />
     </div>
     <div>
       <label class="block">Localisation</label>
-      <input v-model="form.location" type="text" class="input-field" required />
+      <input
+        v-model="form.location"
+        type="text"
+        class="input-field"
+        placeholder="Localisation"
+        required
+      />
     </div>
     <div>
       <label class="block">Compétence</label>
@@ -14,12 +26,19 @@
         v-model="form.jurisdiction"
         type="text"
         class="input-field"
+        placeholder="Compétence"
         required
       />
     </div>
     <div>
       <label class="block">Contact</label>
-      <input v-model="form.contact" type="text" class="input-field" required />
+      <input
+        v-model="form.contact"
+        type="text"
+        class="input-field"
+        placeholder="Contact"
+        required
+      />
     </div>
     <button type="submit" class="btn-primary">
       {{ isEdit ? "Mettre à jour" : "Créer" }}
@@ -30,7 +49,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useCourtStore } from "../../store/courtStore";
+import { useCourtStore } from "../../stores/courtStore";
 
 const props = defineProps({
   courtData: {

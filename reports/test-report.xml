@@ -1,15 +1,6 @@
 <testExecutions version="1">
-  <file path="tests/CourtList.test.js">
-    <testCase name="CourtList.vue - affiche la liste des tribunaux" duration="30" />
-    <testCase name="CourtList.vue - filtre les tribunaux par recherche" duration="12" />
-    <testCase name="CourtList.vue - supprime un tribunal correctement" duration="5" />
-  </file>
-  <file path="tests/CreateCourt.test.js">
-    <testCase name="ajoute un tribunal et redirige vers la liste" duration="31" />
-  </file>
-  <file path="tests/courtStore.test.js">
-    <testCase name="CourtStore - filtre correctement les tribunaux par nom" duration="7" />
-    <testCase name="CourtStore - filtre correctement les tribunaux par emplacement" duration="1" />
-    <testCase name="CourtStore - supprime un tribunal par ID" duration="1" />
+  <file path="tests/CourtForm.test.js">
+    <testCase name="CourtForm.vue - affiche le formulaire en mode création" duration="17" />
+    <testCase name="CourtForm.vue - affiche le formulaire en mode édition" duration="3" />
   </file>
 </testExecutions>
