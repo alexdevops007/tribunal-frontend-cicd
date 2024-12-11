@@ -1,7 +1,81 @@
 <testExecutions version="1">
-  <file path="tests/CourtForm.test.js">
-    <testCase name="CourtForm.vue - remplit les champs lors de l&apos;édition" duration="16" />
-    <testCase name="CourtForm.vue - appelle addCourt pour créer un tribunal" duration="9" />
-    <testCase name="CourtForm.vue - appelle editCourt pour mettre à jour un tribunal" duration="4" />
+  <file path="tests/router.test.js">
+    <testCase name="Router Configuration - doit contenir toutes les routes définies" duration="10">
+      <failure message="expected [ { path: &apos;/court/:id&apos;, …(13) }, …(2) ] to have a length of 4 but got 3">
+        <![CDATA[AssertionError: expected [ { path: &apos;/court/:id&apos;, …(13) }, …(2) ] to have a length of 4 but got 3
+    at Proxy.&lt;anonymous&gt; (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/expect/dist/index.js:1339:22)
+    at Proxy.&lt;anonymous&gt; (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/expect/dist/index.js:972:17)
+    at Proxy.methodWrapper (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/chai/chai.js:1610:25)
+    at /Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/tests/router.test.js:14:20
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:146:14
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:533:11
+    at runWithTimeout (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:39:7)
+    at runTest (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1056:17)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)]]>
+      </failure>
+    </testCase>
+    <testCase name="Router Configuration - doit utiliser `createWebHistory` comme méthode d&apos;historique" duration="2">
+      <failure message="expected { location: &apos;/&apos;, base: &apos;&apos;, …(8) } to be an instance of createWebHistory">
+        <![CDATA[AssertionError: expected { location: &apos;/&apos;, base: &apos;&apos;, …(8) } to be an instance of createWebHistory
+    at Proxy.&lt;anonymous&gt; (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/expect/dist/index.js:1336:17)
+    at Proxy.&lt;anonymous&gt; (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/expect/dist/index.js:972:17)
+    at Proxy.methodWrapper (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/chai/chai.js:1610:25)
+    at /Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/tests/router.test.js:40:36
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:146:14
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:533:11
+    at runWithTimeout (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:39:7)
+    at runTest (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1056:17)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)]]>
+      </failure>
+    </testCase>
+    <testCase name="Router Configuration - navigue correctement vers la page d&apos;accueil" duration="3" />
+    <testCase name="Router Configuration - navigue correctement vers la page des détails d&apos;un tribunal" duration="2">
+      <failure message="expected &apos;Home&apos; to be &apos;CourtDetail&apos; // Object.is equality">
+        <![CDATA[AssertionError: expected &apos;Home&apos; to be &apos;CourtDetail&apos; // Object.is equality
+    at /Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/tests/router.test.js:52:44
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+    at withEnv (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)]]>
+      </failure>
+    </testCase>
+    <testCase name="Router Configuration - navigue correctement vers la page de création d&apos;un tribunal" duration="1">
+      <failure message="expected &apos;Home&apos; to be &apos;CreateCourt&apos; // Object.is equality">
+        <![CDATA[AssertionError: expected &apos;Home&apos; to be &apos;CreateCourt&apos; // Object.is equality
+    at /Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/tests/router.test.js:59:44
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+    at withEnv (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)]]>
+      </failure>
+    </testCase>
+    <testCase name="Router Configuration - navigue correctement vers la page d&apos;édition d&apos;un tribunal" duration="2">
+      <failure message="expected &apos;/&apos; to be &apos;/edit/1&apos; // Object.is equality">
+        <![CDATA[AssertionError: expected &apos;/&apos; to be &apos;/edit/1&apos; // Object.is equality
+    at /Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/tests/router.test.js:65:44
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+    at withEnv (file:///Users/alexsimisinta/Desktop/Devops-Cloud/ci-cd/gestion-tribunaux/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)]]>
+      </failure>
+    </testCase>
+    <testCase name="Router Configuration - retourne une erreur 404 pour une route inconnue" duration="1" />
   </file>
 </testExecutions>
