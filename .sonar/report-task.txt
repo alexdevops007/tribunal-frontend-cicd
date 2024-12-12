@@ -2,5 +2,5 @@ projectKey=gestion-tribunaux
 serverUrl=http://localhost:9000
 serverVersion=24.12.0.100206
 dashboardUrl=http://localhost:9000/dashboard?id=gestion-tribunaux
-ceTaskId=8763df1b-f5ce-466c-84fe-5b0d3c147363
-ceTaskUrl=http://localhost:9000/api/ce/task?id=8763df1b-f5ce-466c-84fe-5b0d3c147363
+ceTaskId=a3b9789a-1637-4645-b23e-bfb17c4b67bf
+ceTaskUrl=http://localhost:9000/api/ce/task?id=a3b9789a-1637-4645-b23e-bfb17c4b67bf

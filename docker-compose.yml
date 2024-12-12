@@ -15,13 +15,14 @@ services:
     depends_on:
       - mongodb
       - sonarqube
+      - jenkins
 
   vue-frontend-preprod:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4000:80" # Préprod (accessible sur localhost:4000)
+      - "4000:80"
     environment:
       - NODE_ENV=production
     networks:
@@ -34,7 +35,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:80" # Prod (accessible sur localhost:5000)
+      - "5000:80"
     environment:
       - NODE_ENV=production
     networks:
@@ -61,11 +62,32 @@ services:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
       - SONAR_WEB_HOST=0.0.0.0
       - SONAR_WEB_PORT=9000
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-logs:/opt/sonarqube/logs
+      - sonarqube-extensions:/opt/sonarqube/extensions
+    networks:
+      - app-network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-launch
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - app-network
 
 volumes:
   mongodb-data:
+  sonarqube-data:      # Volume pour les données de SonarQube
+  sonarqube-logs:      # Volume pour les logs de SonarQube
+  sonarqube-extensions: # Volume pour les extensions/plugins de SonarQube
+  jenkins_home:
 
 networks:
   app-network:
