@@ -1,18 +1,46 @@
 version: '3.8'
 
 services:
-  app:
+  vue-frontend:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: vue-gestion-tribunaux
     ports:
-      - "5173:5173"
+      - "3000:80"
+    environment:
+      - NODE_ENV=development
     networks:
       - app-network
     depends_on:
       - mongodb
       - sonarqube
+
+  vue-frontend-preprod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:80" # Préprod (accessible sur localhost:4000)
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  vue-frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80" # Prod (accessible sur localhost:5000)
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
 
   mongodb:
     image: mongo:5.0

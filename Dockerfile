@@ -1,23 +1,33 @@
-# Dockerfile
-FROM node:18.20.5-alpine
+# Étape 1 : Construction
+FROM node:18.20.5 as build
 
 # Définir le répertoire de travail dans le conteneur
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json
+# Copier les fichiers nécessaires
 COPY package*.json ./
+COPY vite.config.js ./
 
 # Installer les dépendances
 RUN npm install
 
-# Copier les autres fichiers de l'application
+# Copier le reste du projet
 COPY . .
 
 # Construire l'application pour la production
 RUN npm run build
 
-# Exposer le port 5173 (par défaut pour Vite)
-EXPOSE 5173
+# Étape 2 : Serveur pour servir les fichiers statiques
+FROM nginx:stable-alpine
 
-# Commande de démarrage
-CMD ["npm", "run", "preview"]
+# Copier les fichiers construits dans le dossier nginx
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copier le fichier de configuration nginx si nécessaire
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Exposer le port 80 pour accéder à l'application
+EXPOSE 80
+
+# Commande par défaut pour lancer nginx
+CMD ["nginx", "-g", "daemon off;"]

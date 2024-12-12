@@ -3,7 +3,7 @@ const scanner = require("sonarqube-scanner").default;
 scanner(
   {
     serverUrl: "http://localhost:9000",
-    token: "squ_834b427eac9a15c962524ee45daa376c38292553",
+    token: "squ_6e82827a0bc289c8db9fe40f1975b91b437c21e1",
     options: {
       "sonar.projectKey": "gestion-tribunaux",
       "sonar.projectName": "Gestion Tribunaux Vue.js",
