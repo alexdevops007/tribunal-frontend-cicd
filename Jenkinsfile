@@ -2,60 +2,51 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = 'development'
-        DOCKER_IMAGE = 'vue-gestion-tribunaux'
-        SONARQUBE_SERVER = 'SonarQube'
-        DOCKER_CREDENTIALS = 'docker-credentials-id'
+        DOCKER_IMAGE = 'gestion-tribunaux-frontend'
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        REGISTRY = 'localhost:5000'
+        NODE_ENV = 'production'
+        SONAR_HOST_URL = 'http://localhost:9000'
+        SONAR_PROJECT_KEY = 'gestion-tribunaux'
+        SONAR_LOGIN = credentials('squ_19bf18734ca81d4c2a17917c8ec525505a623143') // Assurez-vous d'ajouter un jeton SonarQube dans les credentials Jenkins
     }
 
     stages {
-        stage('Checkout') {
+        stage('Install Dependencies') {
             steps {
-                // Récupérer le code depuis le dépôt Git
-                checkout scm
-            }
-        }
-
-        stage('Install dependencies') {
-            steps {
-                script {
-                    // Installer les dépendances
-                    sh 'npm install'
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
-                    // Construire le frontend
-                    sh 'npm run build'
-                }
+                echo 'Installing dependencies...'
+                sh 'npm install'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                script {
-                    // Exécuter les tests unitaires
-                    sh 'npm run test'
+                echo 'Running unit tests...'
+                sh 'npm run test:coverage'
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false,
+                                 alwaysLinkToLastBuild: true,
+                                 keepAll: true,
+                                 reportDir: 'coverage',
+                                 reportFiles: 'index.html',
+                                 reportName: 'Coverage Report'])
                 }
             }
         }
 
         stage('Run E2E Tests') {
             steps {
-                script {
-                    // Exécuter les tests E2E avec Cypress
-                    sh 'npm run test:e2e'
-                }
+                echo 'Running end-to-end tests...'
+                sh 'npm run test:e2e'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv(SONARQUBE_SERVER) {
-                    // Exécuter l'analyse SonarQube
+                echo 'Running SonarQube analysis...'
+                withSonarQubeEnv('SonarQube') { // Nom du serveur SonarQube dans Jenkins
                     sh 'npm run sonar'
                 }
             }
@@ -63,80 +54,84 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Construire une image Docker pour le frontend
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:latest .
-                    """
-                }
+                echo 'Building Docker image...'
+                sh """
+                    docker build -t ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    docker tag ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} ${REGISTRY}/${DOCKER_IMAGE}:latest
+                """
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    script {
-                        // Pousser l'image Docker sur le registre
-                        sh """
-                            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-                            docker tag ${DOCKER_IMAGE}:latest your-docker-repo/${DOCKER_IMAGE}:latest
-                            docker push your-docker-repo/${DOCKER_IMAGE}:latest
-                        """
-                    }
-                }
+                echo 'Pushing Docker image to registry...'
+                sh """
+                    docker push ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                    docker push ${REGISTRY}/${DOCKER_IMAGE}:latest
+                """
             }
         }
 
         stage('Deploy to Development') {
+            when {
+                branch 'develop'
+            }
             steps {
-                script {
-                    // Déployer sur l'environnement de développement
-                    sh """
-                        docker-compose -f docker-compose.yml up -d vue-frontend
-                    """
-                }
+                echo 'Deploying to Development...'
+                sh """
+                    docker stop vue-frontend-dev || true
+                    docker rm vue-frontend-dev || true
+                    docker run -d --name vue-frontend-dev \
+                        -e NODE_ENV=development \
+                        -p 3000:80 ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
 
-        stage('Deploy to Pre-Production') {
+        stage('Deploy to Preproduction') {
+            when {
+                branch 'preprod'
+            }
             steps {
-                script {
-                    // Déployer sur l'environnement de préproduction
-                    sh """
-                        docker-compose -f docker-compose.yml up -d vue-frontend-preprod
-                    """
-                }
+                echo 'Deploying to Preproduction...'
+                sh """
+                    docker stop vue-frontend-preprod || true
+                    docker rm vue-frontend-preprod || true
+                    docker run -d --name vue-frontend-preprod \
+                        -e NODE_ENV=production \
+                        -p 4000:80 ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
 
         stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
             steps {
-                script {
-                    // Déployer sur l'environnement de production
-                    sh """
-                        docker-compose -f docker-compose.yml up -d vue-frontend-prod
-                    """
-                }
+                echo 'Deploying to Production...'
+                sh """
+                    docker stop vue-frontend-prod || true
+                    docker rm vue-frontend-prod || true
+                    docker run -d --name vue-frontend-prod \
+                        -e NODE_ENV=production \
+                        -p 5000:80 ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
     }
 
     post {
         always {
-            // Nettoyer l'espace de travail après l'exécution
             cleanWs()
         }
         success {
-            // Notifier en cas de succès
-            mail to: 'egec.rdc1@gmail.com',
-                 subject: "Build Succès: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Le build ${env.BUILD_NUMBER} du job ${env.JOB_NAME} a réussi. Détails : ${env.BUILD_URL}"
+            echo 'Pipeline executed successfully!'
         }
         failure {
-            // Notifier en cas d'échec
-            mail to: 'egec.rdc1@gmail.com',
-                 subject: "Build Échec: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Le build ${env.BUILD_NUMBER} du job ${env.JOB_NAME} a échoué. Détails : ${env.BUILD_URL}"
+            mail to: 'admin@example.com',
+                 subject: "Build Failed: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+                 body: "The build has failed. Check the Jenkins logs for details."
         }
     }
 }
