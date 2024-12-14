@@ -46,7 +46,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo 'Running SonarQube analysis...'
-                withSonarQubeEnv('SonarQube') { // Nom du serveur SonarQube dans Jenkins
+                withSonarQubeEnv('sonarServer') { // Nom du serveur SonarQube dans Jenkins
                     sh 'npm run sonar'
                 }
             }
@@ -123,7 +123,10 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            echo 'Cleaning workspace...'
+            node {
+                cleanWs()
+            }
         }
         success {
             echo 'Pipeline executed successfully!'
